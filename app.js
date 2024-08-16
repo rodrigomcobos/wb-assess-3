@@ -11,7 +11,9 @@ const port = '8000';
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
-app.use(session({ secret: 'ssshhhhh', saveUninitialized: true, resave: false }));
+app.use(
+  session({ secret: 'ssshhhhh', saveUninitialized: true, resave: false })
+);
 
 nunjucks.configure('views', {
   autoescape: true,
@@ -60,13 +62,59 @@ const OTHER_FOSSILS = [
   },
 ];
 
-// TODO: Replace this comment with your code
+/////////////////////////////////// - ROUTES - ///////////////////////////////////
 
+//Top Fossils Route
+app.get('/top-fossils', (req, res) => {
+  if (req.session.name) {
+    res.render('top-fossils.html.njk', {
+      name: req.session.name,
+      MOST_LIKED_FOSSILS,
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
+//Homepage Route
+app.get('/', (req, res) => {
+  if (req.session.name) {
+    res.redirect('/top-fossils');
+  } else {
+    res.render('homepage.html.njk');
+  }
+});
+
+//Get Name Route
+app.get('/get-name', (req, res) => {
+  const name = req.query.name;
+  req.session.name = name;
+  res.redirect('/top-fossils');
+});
+
+//Increase Likes Route
+app.get('/increase-like', (req, res) => {
+  const name = req.query.name;
+  MOST_LIKED_FOSSILS[name].num_likes += 1;
+  res.redirect('/top-fossils');
+});
+
+//Like Fossil Route
+app.post('/like-fossil', (req, res) => {
+  const fossilName = req.body['fossil-select'];
+  MOST_LIKED_FOSSILS[fossilName].num_likes += 1;
+  res.render('thank-you.html.njk', {
+    name: req.session.name,
+  });
+});
+
+//Random Fossil
 app.get('/random-fossil.json', (req, res) => {
   const randomFossil = lodash.sample(OTHER_FOSSILS);
   res.json(randomFossil);
 });
 
+//Vite Route
 ViteExpress.listen(app, port, () => {
   console.log(`Server running on http://localhost:${port}...`);
 });

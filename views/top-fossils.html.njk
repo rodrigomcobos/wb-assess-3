@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{# <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,12 +7,43 @@
     <title>Most Liked Fossils</title>
   </head>
   <body>
+    <h1>Welcome, {{ name }}</h1>
+
+    {% for fossil in MOST_LIKED_FOSSILS %}
     <div class="fossil-div">
-      {% for fossilKey, fossiVal in most_liked_fossils %} <!--looping through objects, different from arrays-->
-      <h3>{{ fossils[0].name }}</h3>
+      <h3>{{ name }}, this is a {{ fossil.name }}</h3>
       <h2>Liked {{ fossils[0].num_likes }} times.</h2>
       <img src="{{ fossils[0].img }}" />
-      {% endfor %}
     </div>
+    {% endfor %}
+
   </body>
-</html>
+</html> #}
+
+{% extends 'base.html.njk' %}
+{% block title %}Most Liked Fossils{% endblock title %}
+
+{% block body %}
+<h1>Welcome, {{ name }}</h1>
+
+    {% for fossil in MOST_LIKED_FOSSILS %}
+    <div class="fossil-div">
+      <h3>{{ name }}, this is a {{ fossil.name }}</h3>
+      <h2>Liked {{ fossils[0].num_likes }} times.</h2>
+      <img src="{{ fossils[0].img }}" />
+    </div>
+    {% endfor %}
+
+{############################## Form ##############################}
+
+    <form action="/like-fossil" method="POST">
+      <label for="fossil-select">Select a fossil to like:</label>
+      <select name="fossil-select" id="fossil-select">
+        {% for key, value in MOST_LIKED_FOSSILS %}
+          <option value="{{ key }}">{{ value.name }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Like this fossil!" />
+    </form>
+
+{% endblock %}
