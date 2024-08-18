@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="/public/styles.css" />
   </head>
   <body>
+    <header class="header">
+        <div class="logo">Natural Museum</div>
+        <div class="user-info">
+            <span class="user-name">{{ name }}</span>
+            <img src="/profile-placeholder.png" alt="Profile" class="profile-img">
+        </div>
+    </header>
+
     {% block body %}{% endblock body %}
+    <script src="https://kit.fontawesome.com/14c35aa0a2.js" crossorigin="anonymous"></script>
   </body>
 </html>
