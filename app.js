@@ -108,10 +108,17 @@ app.post('/like-fossil', (req, res) => {
   });
 });
 
-//Random Fossil
+//Random Fossil Route
 app.get('/random-fossil.json', (req, res) => {
   const randomFossil = lodash.sample(OTHER_FOSSILS);
   res.json(randomFossil);
+});
+
+//Thank You Route
+app.get('/thank-you', (req, res) => {
+  res.render('thank-you.html.njk', {
+    name: req.session.name,
+  });
 });
 
 //Vite Route
